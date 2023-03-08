@@ -1,134 +1,70 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import Pino, { LevelWithSilent } from 'pino';
+import Pino, { Level } from 'pino';
 
-interface EmailInformation {
-  email: string;
-  name?: string;
-}
-
-interface EmailAttachment {
-  name: string;
-  contentType: string;
-  content: string;
-}
-
-type MailOptions = {
-  to: EmailInformation[];
-  cc?: EmailInformation[];
-  bcc?: EmailInformation[];
-
-  sender: EmailInformation;
-  reply?: EmailInformation;
-  attachments?: EmailAttachment[];
+export type SavimFunctions = {
+  uploadFile: <TParams>(params: TParams) => Promise<void>;
+  deleteFile: <TParams>(params: TParams) => Promise<void>;
+  getFile: <TParams, TFile>(params: TParams) => Promise<TFile>;
 };
 
-export interface TransactionalMailOptions extends MailOptions {
-  params?: Record<string, unknown>;
-  templateId: string;
-}
+export type SavimProvider = SavimFunctions & {
+  name: string;
 
-export interface RawMailOptions extends MailOptions {
-  textContent: string;
-  htmlContent: string;
-  subject: string;
-}
+  isHealthy: () => Promise<boolean>;
+};
 
-export abstract class SendimTransportInterface {
-  providerName!: string;
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-  constructor(_config: object) {}
-
-  isHealthy!: () => Promise<boolean>;
-
-  sendRawMail!: (options: RawMailOptions) => Promise<void>;
-  sendTransactionalMail!: (options: TransactionalMailOptions) => Promise<void>;
-}
-
-export class Sendim {
-  transports: Record<string, unknown> = {};
+export class Savim implements SavimFunctions {
+  providers: Record<string, SavimProvider> = {};
   logger: Pino.BaseLogger;
 
-  constructor(log?: LevelWithSilent) {
+  constructor(log?: Level) {
     this.logger = Pino({ level: log || 'info' });
   }
 
-  async addTransport<T>(
-    transport: new (...args: any[]) => SendimTransportInterface,
+  async addProvider<T>(
+    provider: new (...args: any[]) => SavimProvider,
     config: T,
   ) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //@ts-ignore
-    const newTransport: SendimTransportInterface = new transport(config);
+    const newProvider: SavimProvider = new provider(config);
 
-    if (!(await newTransport.isHealthy())) {
+    if (!(await newProvider.isHealthy())) {
       this.logger.error(
-        `[SENDIM] Transport ${newTransport.providerName} is not healthy !`,
+        `[SAVIM] Transport ${newProvider.name} is not healthy !`,
       );
       return;
     }
 
-    this.transports[newTransport.providerName] = newTransport;
+    this.providers[newProvider.name] = newProvider;
   }
 
-  async sendRawMail(options: RawMailOptions, transportName?: string) {
-    const transportKeys = Object.keys(this.transports);
+  async uploadFile<TParams>(params: TParams, providerName?: string) {
+    const provider = this.getInvolvedProvider(providerName);
 
-    let transport: SendimTransportInterface;
+    this.logger.debug(
+      `[SAVIM] Upload file ${
+        provider ? `(Provider: ${provider.name})` : '(No provider)'
+      }`,
+    )
+    this.logger.debug(params);
 
-    if (transportName && this.transports[transportName]) {
-      transport = this.transports[transportName] as SendimTransportInterface;
-    }
-
-    //@ts-ignore
-    if (!transport && transportKeys?.length > 0) {
-      transport = this.transports[transportKeys[0]] as SendimTransportInterface;
-    }
-
-    //@ts-ignore
-    if (!transport) {
-      this.logger.debug(`[SENDIM] Send raw email`);
-      this.logger.debug(options);
-    } else {
-      this.logger.debug(
-        `[SENDIM] Send raw email  (Transport: ${transport.providerName}) `,
-      );
-      this.logger.debug(options);
-
-      await transport.sendRawMail(options);
+    if (provider) {
+      await provider.uploadFile(params);
     }
   }
 
-  async sendTransactionalMail(
-    options: TransactionalMailOptions,
-    transportName?: string,
-  ) {
-    const transportKeys = Object.keys(this.transports);
+  private getInvolvedProvider = (
+    providerName?: string,
+  ): SavimProvider | undefined => {
+    const ProvidersKeys = Object.keys(this.providers);
 
-    let transport: SendimTransportInterface;
+    let provider: SavimProvider | undefined = undefined;
 
-    if (transportName && this.transports[transportName]) {
-      transport = this.transports[transportName] as SendimTransportInterface;
+    if (providerName && this.providers[providerName]) {
+      provider = this.providers[providerName];
+    } else if (ProvidersKeys?.length > 0) {
+      provider = this.providers[ProvidersKeys[0]];
     }
 
-    //@ts-ignore
-    if (!transport && transportKeys?.length > 0) {
-      transport = this.transports[transportKeys[0]] as SendimTransportInterface;
-    }
-
-    //@ts-ignore
-    if (!transport) {
-      this.logger.debug(
-        `[SENDIM] Send transactional email (Template: ${options.templateId})`,
-      );
-      this.logger.debug(options);
-    } else {
-      this.logger.debug(
-        `[SENDIM] Send transactional email (Template: ${options.templateId} / Transport: ${transport.providerName}) `,
-      );
-      this.logger.debug(options);
-
-      await transport.sendTransactionalMail(options);
-    }
-  }
+    return provider;
+  };
 }
