@@ -66,8 +66,6 @@ describe('Savim', () => {
       test: '',
     });
 
-    expect(
-      await savim.deleteFile('toto', {} as SavimSampleProviderConfig),
-    ).toBe(undefined);
+    expect(await savim.deleteFile('toto', {})).toBe(undefined);
   });
 });
