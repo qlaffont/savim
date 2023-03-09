@@ -1,148 +1,71 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { Sendim } from '../src';
+import { Savim } from '../src';
 import {
-  SendimSampleProvider,
-  SendimSampleProviderConfig,
-  SendimSampleProviderNotHealthy,
-} from './utils/SendimSampleProvider';
+  SavimSampleProvider,
+  SavimSampleProviderConfig,
+  SavimSampleProviderNotHealthy,
+} from './utils/SavimSampleProvider';
 
-describe('Sendim', () => {
+describe('Savim', () => {
   it('should be Defined', () => {
-    expect(Sendim).toBeDefined();
+    expect(Savim).toBeDefined();
   });
 
   it('should be able to define log', () => {
-    expect(new Sendim('debug')).toBeDefined();
+    expect(new Savim('debug')).toBeDefined();
   });
 
   it('should be able to add transport', async () => {
-    let sendim = new Sendim();
+    let savim = new Savim();
 
-    await sendim.addTransport<SendimSampleProviderConfig>(
-      SendimSampleProvider,
+    await savim.addProvider<SavimSampleProviderConfig>(SavimSampleProvider, {
+      test: '',
+    });
+
+    expect(savim).toBeDefined();
+    expect(savim.providers).toBeDefined();
+    expect(Object.keys(savim.providers)).toHaveLength(1);
+
+    savim = new Savim();
+
+    await savim.addProvider<SavimSampleProviderConfig>(
+      SavimSampleProviderNotHealthy,
       { test: '' },
     );
 
-    expect(sendim).toBeDefined();
-    expect(sendim.transports).toBeDefined();
-    expect(Object.keys(sendim.transports)).toHaveLength(1);
-
-    sendim = new Sendim();
-
-    await sendim.addTransport<SendimSampleProviderConfig>(
-      SendimSampleProviderNotHealthy,
-      { test: '' },
-    );
-
-    expect(sendim).toBeDefined();
-    expect(sendim.transports).toBeDefined();
-    expect(Object.keys(sendim.transports)).toHaveLength(0);
+    expect(savim).toBeDefined();
+    expect(savim.providers).toBeDefined();
+    expect(Object.keys(savim.providers)).toHaveLength(0);
   });
 
-  it('should be able to send raw email', async () => {
-    const sendim = new Sendim();
+  it('should be able to upload file', async () => {
+    const savim = new Savim();
 
-    expect(sendim.sendRawMail).toBeDefined();
-
-    await sendim.sendRawMail({
-      textContent: '',
-      htmlContent: '',
-      subject: '',
-      to: [
-        {
-          email: 'test@test.fr',
-        },
-      ],
-      sender: {
-        email: 'test@test.fr',
-      },
+    await savim.addProvider<SavimSampleProviderConfig>(SavimSampleProvider, {
+      test: '',
     });
 
-    await sendim.addTransport<SendimSampleProviderConfig>(
-      SendimSampleProvider,
-      { test: '' },
-    );
-
-    await sendim.sendRawMail({
-      textContent: '',
-      htmlContent: '',
-      subject: '',
-      to: [
-        {
-          email: 'test@test.fr',
-        },
-      ],
-      sender: {
-        email: 'test@test.fr',
-      },
-    });
-
-    await sendim.sendRawMail(
-      {
-        textContent: '',
-        htmlContent: '',
-        subject: '',
-        to: [
-          {
-            email: 'test@test.fr',
-          },
-        ],
-        sender: {
-          email: 'test@test.fr',
-        },
-      },
-      'sample',
-    );
+    expect(await savim.uploadFile('toto', 'base64fake', {})).toEqual(true);
   });
 
-  it('should be able to send transactional email', async () => {
-    const sendim = new Sendim();
+  it('should be able to get file', async () => {
+    const savim = new Savim();
 
-    expect(sendim.sendTransactionalMail).toBeDefined();
-
-    await sendim.sendTransactionalMail({
-      templateId: 'test',
-      to: [
-        {
-          email: 'test@test.fr',
-        },
-      ],
-      sender: {
-        email: 'test@test.fr',
-      },
+    await savim.addProvider<SavimSampleProviderConfig>(SavimSampleProvider, {
+      test: '',
     });
 
-    await sendim.addTransport<SendimSampleProviderConfig>(
-      SendimSampleProvider,
-      { test: '' },
-    );
+    expect(await savim.getFile('toto', {})).toEqual('data');
+  });
 
-    await sendim.sendTransactionalMail({
-      templateId: 'test',
-      to: [
-        {
-          email: 'test@test.fr',
-        },
-      ],
-      sender: {
-        email: 'test@test.fr',
-      },
+  it('should be able to remove file', async () => {
+    const savim = new Savim();
+
+    await savim.addProvider<SavimSampleProviderConfig>(SavimSampleProvider, {
+      test: '',
     });
 
-    await sendim.sendTransactionalMail(
-      {
-        templateId: 'test',
-        to: [
-          {
-            email: 'test@test.fr',
-          },
-        ],
-        sender: {
-          email: 'test@test.fr',
-        },
-      },
-      'sample',
-    );
+    expect(await savim.deleteFile('toto', {})).toBe(undefined);
   });
 });

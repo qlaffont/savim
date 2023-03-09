@@ -1,39 +1,59 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Stream } from 'node:stream';
+
 import { SavimProviderInterface } from '../../src';
 
-export interface SendimSampleProviderConfig {
+export interface SavimSampleProviderConfig {
   test: string;
 }
 
 export class SavimSampleProvider implements SavimProviderInterface {
   name = 'sample';
 
-  constructor(public config: SendimSampleProviderConfig) {}
-
-  uploadFile: <T>(
-    filenameWithPath: string,
-    content: string | Buffer | import('stream'),
-    params: T,
-  ) => Promise<void> = {};
-
-  deleteFile: <T>(params: T) => Promise<void>;
-  getFile: <T, TFile>(
-    filenameWithPath: string,
-    params: T,
-  ) => Promise<TFile | undefined>;
+  constructor(public config: SavimSampleProviderConfig) {}
 
   async isHealthy() {
     return true;
   }
-}
 
-export class SendimSampleProviderNotHealthy
-  implements SendimTransportInterface
-{
+  async uploadFile(
+    _filenameWithPath: string,
+    _content: Buffer | string | Stream,
+    _params: boolean,
+  ): Promise<boolean> {
+    return true;
+  }
+
+  async deleteFile(_filenameWithPath: string, _params: boolean): Promise<void> {
+    return;
+  }
+
+  async getFile(_filenameWithPath: string, _params: boolean): Promise<string> {
+    return 'data';
+  }
+}
+export class SavimSampleProviderNotHealthy implements SavimProviderInterface {
   name = 'sample';
 
-  constructor(public config: SendimSampleProviderConfig) {}
+  constructor(public config: SavimSampleProviderConfig) {}
 
   async isHealthy() {
     return false;
+  }
+
+  async uploadFile(
+    _filenameWithPath: string,
+    _content: Buffer | string | Stream,
+    _params: boolean,
+  ): Promise<boolean> {
+    return true;
+  }
+
+  async deleteFile(_filenameWithPath: string, _params: boolean): Promise<void> {
+    return;
+  }
+
+  async getFile(_filenameWithPath: string, _params: boolean): Promise<string> {
+    return '';
   }
 }

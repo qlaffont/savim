@@ -1,21 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Stream from 'node:stream';
 
 import Pino, { Level } from 'pino';
-
-export type SavimFunctions = {
-  uploadFile: <T, TReturn>(
-    filenameWithPath: string,
-    content: Buffer | string | Stream,
-    params: T,
-    providerName?: string,
-  ) => Promise<TReturn | undefined>;
-  deleteFile: <T>(params: T, providerName?: string) => Promise<void>;
-  getFile: <T, TFile>(
-    filenameWithPath: string,
-    params: T,
-    providerName?: string,
-  ) => Promise<TFile | undefined>;
-};
 
 export abstract class SavimProviderInterface {
   name!: string;
@@ -25,19 +11,19 @@ export abstract class SavimProviderInterface {
 
   isHealthy!: () => Promise<boolean>;
 
-  uploadFile!: <T, TReturn>(
+  uploadFile!: (
     filenameWithPath: string,
     content: Buffer | string | Stream,
-    params: T,
-  ) => Promise<TReturn>;
-  deleteFile!: <T>(params: T) => Promise<void>;
-  getFile!: <T, TFile>(
+    params: any,
+  ) => Promise<unknown>;
+  deleteFile!: (filenameWithPath: string, params: any) => Promise<void>;
+  getFile!: (
     filenameWithPath: string,
-    params: T,
-  ) => Promise<TFile | undefined>;
+    params: any,
+  ) => Promise<unknown | undefined>;
 }
 
-export class Savim implements SavimFunctions {
+export class Savim {
   providers: Record<string, SavimProviderInterface> = {};
   logger: Pino.BaseLogger;
 
@@ -61,10 +47,10 @@ export class Savim implements SavimFunctions {
     this.providers[newProvider.name] = newProvider;
   }
 
-  async uploadFile<T, TReturn>(
+  async uploadFile(
     filenameWithPath: string,
     content: Buffer | string | Stream,
-    params: T,
+    params: object = {},
     providerName?: string,
   ) {
     const provider = this.getInvolvedProvider(providerName);
@@ -79,15 +65,15 @@ export class Savim implements SavimFunctions {
     this.logger.debug(params);
 
     if (provider) {
-      return provider.uploadFile<T, TReturn>(filenameWithPath, content, params);
+      return provider.uploadFile(filenameWithPath, content, params);
     }
 
     return undefined;
   }
 
-  async getFile<T, Tfile>(
+  async getFile(
     filenameWithPath: string,
-    params: T,
+    params: object = {},
     providerName?: string,
   ) {
     const provider = this.getInvolvedProvider(providerName);
@@ -102,13 +88,17 @@ export class Savim implements SavimFunctions {
     this.logger.debug(params);
 
     if (provider) {
-      return provider.getFile<T, Tfile>(filenameWithPath, params);
+      return provider.getFile(filenameWithPath, params);
     }
 
     return undefined;
   }
 
-  async deleteFile<T>(params: T, providerName?: string) {
+  async deleteFile(
+    filenameWithPath: string,
+    params: object = {},
+    providerName?: string,
+  ) {
     const provider = this.getInvolvedProvider(providerName);
 
     this.logger.debug(
@@ -119,7 +109,7 @@ export class Savim implements SavimFunctions {
     this.logger.debug(params);
 
     if (provider) {
-      return provider.deleteFile<T>(params);
+      return provider.deleteFile(filenameWithPath, params);
     }
 
     return undefined;
