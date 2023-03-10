@@ -27,7 +27,7 @@ export class Savim {
   providers: Record<string, SavimProviderInterface> = {};
   logger: Pino.BaseLogger;
 
-  constructor(log?: Level) {
+  constructor(public log?: Level) {
     this.logger = Pino({ level: log || 'info' });
   }
 
