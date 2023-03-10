@@ -39,7 +39,7 @@ export class Savim {
 
     if (!(await newProvider.isHealthy())) {
       this.logger.error(
-        `[SAVIM] Transport ${newProvider.name} is not healthy !`,
+        `[SAVIM] Provider ${newProvider.name} is not healthy !`,
       );
       return;
     }
