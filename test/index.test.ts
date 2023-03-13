@@ -68,4 +68,44 @@ describe('Savim', () => {
 
     expect(await savim.deleteFile('toto', {})).toBe(undefined);
   });
+
+  it('should be able to create folder', async () => {
+    const savim = new Savim();
+
+    await savim.addProvider<SavimSampleProviderConfig>(SavimSampleProvider, {
+      test: '',
+    });
+
+    expect(await savim.createFolder('toto', {})).toEqual(true);
+  });
+
+  it('should be able to remove folder', async () => {
+    const savim = new Savim();
+
+    await savim.addProvider<SavimSampleProviderConfig>(SavimSampleProvider, {
+      test: '',
+    });
+
+    expect(await savim.deleteFolder('toto', {})).toBe(undefined);
+  });
+
+  it('should be able to list folders', async () => {
+    const savim = new Savim();
+
+    await savim.addProvider<SavimSampleProviderConfig>(SavimSampleProvider, {
+      test: '',
+    });
+
+    expect(await savim.getFolders('toto', {})).toEqual(['data']);
+  });
+
+  it('should be able to list files', async () => {
+    const savim = new Savim();
+
+    await savim.addProvider<SavimSampleProviderConfig>(SavimSampleProvider, {
+      test: '',
+    });
+
+    expect(await savim.getFiles('toto', {})).toEqual(['data.txt']);
+  });
 });

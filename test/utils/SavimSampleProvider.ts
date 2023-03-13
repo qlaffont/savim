@@ -31,6 +31,25 @@ export class SavimSampleProvider implements SavimProviderInterface {
   async getFile(_filenameWithPath: string, _params: boolean): Promise<string> {
     return 'data';
   }
+
+  async createFolder(_path: string, _params: boolean): Promise<boolean> {
+    return true;
+  }
+
+  async deleteFolder(_path: string, _params: boolean): Promise<void> {
+    return;
+  }
+
+  async getFolders(_path: string, _params: boolean): Promise<string[]> {
+    return ['data'];
+  }
+
+  async getFiles(
+    _filenameWithPath: string,
+    _params: boolean,
+  ): Promise<string[]> {
+    return ['data.txt'];
+  }
 }
 export class SavimSampleProviderNotHealthy implements SavimProviderInterface {
   name = 'sample';
@@ -55,5 +74,24 @@ export class SavimSampleProviderNotHealthy implements SavimProviderInterface {
 
   async getFile(_filenameWithPath: string, _params: boolean): Promise<string> {
     return '';
+  }
+
+  async createFolder(_path: string, _params: boolean): Promise<boolean> {
+    return true;
+  }
+
+  async deleteFolder(_path: string, _params: boolean): Promise<void> {
+    return;
+  }
+
+  async getFolders(_path: string, _params: boolean): Promise<string[]> {
+    return ['data'];
+  }
+
+  async getFiles(
+    _filenameWithPath: string,
+    _params: boolean,
+  ): Promise<string[]> {
+    return ['data.txt'];
   }
 }
