@@ -21,6 +21,11 @@ export abstract class SavimProviderInterface {
     filenameWithPath: string,
     params: any,
   ) => Promise<unknown | undefined>;
+
+  createFolder!: (path: string, params: any) => Promise<unknown>;
+  deleteFolder!: (path: string, params: any) => Promise<void>;
+  getFolders!: (path: string, params: any) => Promise<string[] | undefined>;
+  getFiles!: (path: string, params: any) => Promise<string[] | undefined>;
 }
 
 export class Savim {
@@ -110,6 +115,74 @@ export class Savim {
 
     if (provider) {
       return provider.deleteFile(filenameWithPath, params);
+    }
+
+    return undefined;
+  }
+
+  async createFolder(path: string, params: object = {}, providerName?: string) {
+    const provider = this.getInvolvedProvider(providerName);
+
+    this.logger.debug(
+      `[SAVIM] Create folder ${
+        provider ? `(Provider: ${provider.name})` : '(No provider)'
+      } ${provider ? `(Provider: ${provider.name})` : '(No provider)'} ${path}`,
+    );
+    this.logger.debug(params);
+
+    if (provider) {
+      return provider.createFolder(path, params);
+    }
+
+    return undefined;
+  }
+
+  async deleteFolder(path: string, params: object = {}, providerName?: string) {
+    const provider = this.getInvolvedProvider(providerName);
+
+    this.logger.debug(
+      `[SAVIM] Delete folder ${
+        provider ? `(Provider: ${provider.name})` : '(No provider)'
+      } ${provider ? `(Provider: ${provider.name})` : '(No provider)'}`,
+    );
+    this.logger.debug(params);
+
+    if (provider) {
+      return provider.deleteFolder(path, params);
+    }
+
+    return undefined;
+  }
+
+  async getFolders(path: string, params: object = {}, providerName?: string) {
+    const provider = this.getInvolvedProvider(providerName);
+
+    this.logger.debug(
+      `[SAVIM] Get folders ${
+        provider ? `(Provider: ${provider.name})` : '(No provider)'
+      } ${provider ? `(Provider: ${provider.name})` : '(No provider)'} ${path}`,
+    );
+    this.logger.debug(params);
+
+    if (provider) {
+      return provider.getFolders(path, params);
+    }
+
+    return undefined;
+  }
+
+  async getFiles(path: string, params: object = {}, providerName?: string) {
+    const provider = this.getInvolvedProvider(providerName);
+
+    this.logger.debug(
+      `[SAVIM] Get files ${
+        provider ? `(Provider: ${provider.name})` : '(No provider)'
+      } ${provider ? `(Provider: ${provider.name})` : '(No provider)'} ${path}`,
+    );
+    this.logger.debug(params);
+
+    if (provider) {
+      return provider.getFiles(path, params);
     }
 
     return undefined;

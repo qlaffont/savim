@@ -44,11 +44,11 @@ Get file
 
 ***Params***
 
-| Field Name       | Type                 | Default  | Description                    |
-| ---------------- | -------------------- | -------- | ------------------------------ |
-| filenameWithPath | string               | required | where to get file           |
-| config           | object               | {}       | Additional Config for provider |
-| providerName     | object               | optional | provider name                  |
+| Field Name       | Type   | Default  | Description                    |
+| ---------------- | ------ | -------- | ------------------------------ |
+| filenameWithPath | string | required | where to get file              |
+| config           | object | {}       | Additional Config for provider |
+| providerName     | object | optional | provider name                  |
 
 ### deleteFile(filenameWithPath, params?, providerName?)
 
@@ -56,11 +56,59 @@ Delete file
 
 ***Params***
 
-| Field Name       | Type                 | Default  | Description                    |
-| ---------------- | -------------------- | -------- | ------------------------------ |
-| filenameWithPath | string               | required | where to delete file           |
-| config           | object               | {}       | Additional Config for provider |
-| providerName     | object               | optional | provider name                  |
+| Field Name       | Type   | Default  | Description                    |
+| ---------------- | ------ | -------- | ------------------------------ |
+| filenameWithPath | string | required | where to delete file           |
+| config           | object | {}       | Additional Config for provider |
+| providerName     | object | optional | provider name                  |
+
+### createFolder(path, params?, providerName?)
+
+Create folder
+
+***Params***
+
+| Field Name   | Type   | Default  | Description                    |
+| ------------ | ------ | -------- | ------------------------------ |
+| path         | string | required | where to create folder         |
+| config       | object | {}       | Additional Config for provider |
+| providerName | object | optional | provider name                  |
+
+### deleteFolder(path, params?, providerName?)
+
+Delete folder
+
+***Params***
+
+| Field Name   | Type   | Default  | Description                    |
+| ------------ | ------ | -------- | ------------------------------ |
+| path         | string | required | where to delete folder         |
+| config       | object | {}       | Additional Config for provider |
+| providerName | object | optional | provider name                  |
+
+### getFolders(path, params?, providerName?)
+
+Get folders path in path
+
+***Params***
+
+| Field Name   | Type   | Default  | Description                    |
+| ------------ | ------ | -------- | ------------------------------ |
+| path         | string | required | where to get folders           |
+| config       | object | {}       | Additional Config for provider |
+| providerName | object | optional | provider name                  |
+
+### getFiles(path, params?, providerName?)
+
+Get files path in path
+
+***Params***
+
+| Field Name   | Type   | Default  | Description                    |
+| ------------ | ------ | -------- | ------------------------------ |
+| path         | string | required | where to get files           |
+| config       | object | {}       | Additional Config for provider |
+| providerName | object | optional | provider name                  |
 
 ## Tests
 
