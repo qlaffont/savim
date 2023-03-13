@@ -25,6 +25,43 @@ Add provider to savim
 | savimProvider | Class implements SavimTransportInterface | required | Provider to use     |
 | config        | object                                   | {}       | Config for provider |
 
+### uploadFile(filenameWithPath, content, params?, providerName?)
+
+Upload file
+
+***Params***
+
+| Field Name       | Type                 | Default  | Description                    |
+| ---------------- | -------------------- | -------- | ------------------------------ |
+| filenameWithPath | string               | required | where to upload file           |
+| content          | string/Buffer/Stream | required | file content                   |
+| config           | object               | {}       | Additional Config for provider |
+| providerName     | object               | optional | provider name                  |
+
+### getFile(filenameWithPath, params?, providerName?)
+
+Get file
+
+***Params***
+
+| Field Name       | Type                 | Default  | Description                    |
+| ---------------- | -------------------- | -------- | ------------------------------ |
+| filenameWithPath | string               | required | where to get file           |
+| config           | object               | {}       | Additional Config for provider |
+| providerName     | object               | optional | provider name                  |
+
+### deleteFile(filenameWithPath, params?, providerName?)
+
+Delete file
+
+***Params***
+
+| Field Name       | Type                 | Default  | Description                    |
+| ---------------- | -------------------- | -------- | ------------------------------ |
+| filenameWithPath | string               | required | where to delete file           |
+| config           | object               | {}       | Additional Config for provider |
+| providerName     | object               | optional | provider name                  |
+
 ## Tests
 
 To execute jest tests (all errors, type integrity test)
