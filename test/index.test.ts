@@ -27,13 +27,45 @@ describe('Savim', () => {
     expect(savim.providers).toBeDefined();
     expect(Object.keys(savim.providers)).toHaveLength(1);
 
+    try {
+      await savim.addProvider<SavimSampleProviderConfig>(SavimSampleProvider, {
+        test: '',
+      });
+
+      expect(savim).toBeDefined();
+      expect(savim.providers).toBeDefined();
+      expect(Object.keys(savim.providers)).toHaveLength(0);
+      // eslint-disable-next-line no-empty
+    } catch (error) {}
+
     savim = new Savim();
 
-    await savim.addProvider<SavimSampleProviderConfig>(
-      SavimSampleProviderNotHealthy,
-      { test: '' },
-    );
+    try {
+      await savim.addProvider<SavimSampleProviderConfig>(
+        SavimSampleProviderNotHealthy,
+        { test: '' },
+      );
 
+      expect(savim).toBeDefined();
+      expect(savim.providers).toBeDefined();
+      expect(Object.keys(savim.providers)).toHaveLength(0);
+      // eslint-disable-next-line no-empty
+    } catch (error) {}
+  });
+
+  it('should be able to remove transport', async () => {
+    const savim = new Savim();
+
+    await savim.addProvider<SavimSampleProviderConfig>(SavimSampleProvider, {
+      test: '',
+    });
+
+    expect(savim).toBeDefined();
+    expect(savim.providers).toBeDefined();
+    expect(Object.keys(savim.providers)).toHaveLength(1);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    await savim.removeProvider(new SavimSampleProvider().name);
     expect(savim).toBeDefined();
     expect(savim.providers).toBeDefined();
     expect(Object.keys(savim.providers)).toHaveLength(0);

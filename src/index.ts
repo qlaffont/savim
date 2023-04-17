@@ -39,6 +39,7 @@ export class Savim {
   async addProvider<T>(
     provider: new (...args: any[]) => SavimProviderInterface,
     config: T,
+    providerName?: string,
   ) {
     const newProvider: SavimProviderInterface = new provider(config);
 
@@ -46,10 +47,23 @@ export class Savim {
       this.logger.error(
         `[SAVIM] Provider ${newProvider.name} is not healthy !`,
       );
-      return;
+      throw 'Provider is not healthy !';
     }
 
-    this.providers[newProvider.name] = newProvider;
+    if (this.providers[providerName || newProvider.name]) {
+      this.logger.error(
+        `[SAVIM] Provider ${providerName || newProvider.name} is not healthy !`,
+      );
+      throw 'Provider already exist !';
+    }
+
+    this.providers[providerName || newProvider.name] = newProvider;
+  }
+
+  async removeProvider(providerName: string) {
+    if (this.providers[providerName]) {
+      delete this.providers[providerName];
+    }
   }
 
   async uploadFile(
