@@ -1,8 +1,8 @@
-[![Test Coverage](https://api.codeclimate.com/v1/badges/82ebbb63cf10115c4a09/test_coverage)](https://codeclimate.com/github/flexper/savim/test_coverage) [![Maintainability](https://api.codeclimate.com/v1/badges/82ebbb63cf10115c4a09/maintainability)](https://codeclimate.com/github/flexper/savim/maintainability) ![npm](https://img.shields.io/npm/v/savim) ![npm](https://img.shields.io/npm/dm/savim) ![Snyk Vulnerabilities for npm package](https://img.shields.io/snyk/vulnerabilities/npm/savim) ![NPM](https://img.shields.io/npm/l/savim)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/82ebbb63cf10115c4a09/test_coverage)](https://codeclimate.com/github/qlaffont/savim/test_coverage) [![Maintainability](https://api.codeclimate.com/v1/badges/82ebbb63cf10115c4a09/maintainability)](https://codeclimate.com/github/qlaffont/savim/maintainability) ![npm](https://img.shields.io/npm/v/savim) ![npm](https://img.shields.io/npm/dm/savim) ![Snyk Vulnerabilities for npm package](https://img.shields.io/snyk/vulnerabilities/npm/savim) ![NPM](https://img.shields.io/npm/l/savim)
 
 # Savim
 
-A simple library to send email cross providers.
+A simple library to send email cross providers. Old Owner: [@flexper](https://github.com/flexper)
 
 ## Usage
 
