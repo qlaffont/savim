@@ -84,6 +84,6 @@
   },
   "dependencies": {
     "@types/node": "^20.0.0",
-    "pino": "^8.10.0"
+    "pino": "^9.0.0"
   }
 }
