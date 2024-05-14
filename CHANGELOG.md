@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.2.140 (2024-05-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @types/node to v20.12.12 ([11a1c77](https://github.com/qlaffont/savim/commit/11a1c77a7900f2f0a4907177af797bd9517d4a5e))
+
 ### 1.2.139 (2024-05-13)
 
 ### 1.2.138 (2024-05-13)
