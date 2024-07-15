@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.2.182 (2024-07-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency pino to v9.3.1 ([bdb7384](https://github.com/qlaffont/savim/commit/bdb7384c2d20871d6698d31db5cae410180c42f4))
+
 ### 1.2.181 (2024-07-15)
 
 ### 1.2.180 (2024-07-15)
